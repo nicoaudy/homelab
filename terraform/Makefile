@@ -42,4 +42,4 @@ fix:
 
 .PHONY: build
 build:
-	cp terraform/terraform.example terraform/terraform.tfvars
+	cp $(TERRAFORM_DIR)/terraform.example $(TERRAFORM_DIR)/terraform.tfvars
