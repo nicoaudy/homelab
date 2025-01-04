@@ -3,7 +3,7 @@ VM_ID=6000
 VM_NAME=ubuntu-24-04-cloud-init-template
 IMAGE_URL=https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
 IMAGE_NAME=noble-server-cloudimg-amd64.img
-STORAGE=local
+STORAGE=local-lvm
 DISK_SIZE=50G
 BRIDGE=vmbr0
 
@@ -43,7 +43,7 @@ all: 0_install_tools 1_prepare_dir 2_download_image 3_customize_image 4_create_v
 
 # Step 6: Configure the VM disk and boot settings
 6_configure_vm:
-	qm set $(VM_ID) --scsihw virtio-scsi-pci --scsi0 $(STORAGE):$(VM_ID)/vm-$(VM_ID)-disk-0.raw
+	qm set $(VM_ID) --scsihw virtio-scsi-pci --scsi0 $(STORAGE):$(VM_ID)/vm-$(VM_ID)-disk-0
 	qm set $(VM_ID) --ide2 $(STORAGE):cloudinit
 	qm set $(VM_ID) --boot c --bootdisk scsi0
 	qm set $(VM_ID) --serial0 socket --vga serial0
