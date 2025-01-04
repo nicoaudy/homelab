@@ -5,6 +5,8 @@ IMAGE_URL=https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-am
 IMAGE_NAME=noble-server-cloudimg-amd64.img
 STORAGE=local-lvm
 DISK_SIZE=50G
+CORES=2
+MEMORY=2048
 BRIDGE=vmbr0
 
 # Default target
@@ -35,7 +37,7 @@ all: 0_install_tools 1_prepare_dir 2_download_image 3_customize_image 4_create_v
 
 # Step 4: Create a new Proxmox VM
 4_create_vm:
-	qm list | grep -q $(VM_ID) || qm create $(VM_ID) --name $(VM_NAME) --numa 0 --ostype l26 --cpu cputype=host --cores 4 --sockets 2 --memory 6144 --net0 virtio,bridge=$(BRIDGE)
+	qm list | grep -q $(VM_ID) || qm create $(VM_ID) --name $(VM_NAME) --numa 0 --ostype l26 --cpu cputype=host --cores $(CORES) --sockets 2 --memory $(MEMORY) --net0 virtio,bridge=$(BRIDGE)
 
 # Step 5: Import the cloud image as a disk
 5_import_disk:
@@ -43,7 +45,7 @@ all: 0_install_tools 1_prepare_dir 2_download_image 3_customize_image 4_create_v
 
 # Step 6: Configure the VM disk and boot settings
 6_configure_vm:
-	qm set $(VM_ID) --scsihw virtio-scsi-pci --scsi0 $(STORAGE):$(VM_ID)/vm-$(VM_ID)-disk-0
+	qm set $(VM_ID) --scsihw virtio-scsi-pci --scsi0 $(STORAGE):vm-$(VM_ID)-disk-0
 	qm set $(VM_ID) --ide2 $(STORAGE):cloudinit
 	qm set $(VM_ID) --boot c --bootdisk scsi0
 	qm set $(VM_ID) --serial0 socket --vga serial0
