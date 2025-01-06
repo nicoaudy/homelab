@@ -1,4 +1,4 @@
-resource "proxmox_vm_qemu" "terraform-cloudinit" {
+resource "proxmox_vm_qemu" "vm" {
   name = var.vm_name
   desc = "A VM for using terraform and cloudinit"
 
@@ -35,13 +35,13 @@ resource "proxmox_vm_qemu" "terraform-cloudinit" {
     scsi {
       scsi0 {
         disk {
-          size    = 32
-          cache   = "writeback"
-          storage = "local"
-          #storage_type    = "rbd"
-          #iothread        = true
-          #discard         = true
-          replicate = true
+          size              = var.disk_size
+          cache             = "writeback"
+          storage           = var.local_storage
+          #storage_type     = "rbd"
+          #iothread         = true
+          #discard          = true
+          replicate         = true
         }
       }
     }
@@ -56,7 +56,6 @@ resource "proxmox_vm_qemu" "terraform-cloudinit" {
 
   # Setup the ip address using cloud-init.
   boot = "order=scsi0"
-
 
   ipconfig0 = "ip=dhcp"
 
