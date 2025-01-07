@@ -90,3 +90,8 @@ variable "ssh_key" {
   description = "SSH key for cloud-init"
   type        = string
 }
+
+variable "private_key" {
+  description = "Filepath to the private key"
+  type        = string
+}

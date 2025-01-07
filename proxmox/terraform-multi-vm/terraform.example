@@ -24,4 +24,5 @@ network_bridge = "vmbr0"
 user      = "nico"
 password  = "password"
 
-ssh_key = ""
+ssh_key     = ""
+private_key = ""
