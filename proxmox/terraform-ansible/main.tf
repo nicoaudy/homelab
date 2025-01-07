@@ -87,6 +87,12 @@ resource "null_resource" "create_ansible_inventory" {
       cat <<EOL > inventory.ini
       [vms]
       ${join("\n", formatlist("%s ansible_host=%s", proxmox_vm_qemu.vm.*.name, proxmox_vm_qemu.vm.*.default_ipv4_address))}
+
+      [vms:vars]
+      ansible_become=true
+      ansible_user=${var.user}
+      ansible_ssh_private_key_file=${var.private_key}
+      ansible_ssh_common_args='-o StrictHostKeyChecking=no'
       EOL
     EOT
   }
@@ -96,7 +102,7 @@ resource "null_resource" "create_ansible_inventory" {
 
 resource "null_resource" "ansible" {
   provisioner "local-exec" {
-    command = "sleep 180; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini prometheus-playbook.yml -u ${var.user} --private-key ${var.private_key}"
+    command = "sleep 180; ansible-playbook -i inventory.ini playbook.yml"
   }
 
   depends_on = [

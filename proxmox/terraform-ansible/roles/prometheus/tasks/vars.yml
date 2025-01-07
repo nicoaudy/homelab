@@ -1,0 +1,4 @@
+packages:
+  download_url: https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
+  package_name: node_exporter-1.6.1.linux-amd64.tar.gz
+temp_dir: /tmp
